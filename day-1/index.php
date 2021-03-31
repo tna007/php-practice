@@ -221,7 +221,12 @@
                 default:
                 break;
             }
-            $result= $result .='kymmentä';
+            
+            if ($remainder!=0) {
+                $result= $result .='kymmentä';
+            } else {
+                $result = $result;
+            }
 
             switch($remainder2) {
                 case 1:
