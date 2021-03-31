@@ -11,7 +11,8 @@
         echo '<h1>Finnish number translator</h1> <br>'; 
 
         $result = '';
-        $counter = random_int(0,1000);
+        //$counter = random_int(0,1000);
+        $counter = 207;
         echo $counter;
         echo '<hr>';
         if ($counter >= 0 && $counter <=10) {
@@ -221,13 +222,9 @@
                 default:
                 break;
             }
-            
-            if ($remainder!=0) {
-                $result= $result .='kymmentä';
-            } else {
-                $result = $result;
-            }
 
+            $remainder!=0 ? $result= $result .='kymmentä' : $result = $result;
+            
             switch($remainder2) {
                 case 1:
                     $result .= 'yksi';
