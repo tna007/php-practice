@@ -31,11 +31,15 @@
         print_r(count($new_arr));
         echo '<hr>';
 
-        echo '<h4>this is page ' . htmlspecialchars($_GET["page"]) . ' of Pokemons!</h4><br>';
         $page = $_GET['page'];
-        echo '<pre>';
-        print_r($new_arr[$page]);
-        echo '</pre>';         
+        if ($page < count($new_arr)) {
+            echo '<h4>this is page ' . htmlspecialchars($_GET["page"]) . ' of Pokemons!</h4><br>';
+            echo '<pre>';
+            print_r($new_arr[$page]);
+            echo '</pre>';         
+        } else {
+            echo '<h4 style=\'color: red\'>404 ERROR!</h4>';
+        }
     ?>
 </body>
 </html>
