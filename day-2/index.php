@@ -13,9 +13,7 @@
         $i = 0;
         echo '<h2>Total pokemons: ' . $json['count'] . '</h2>';
         echo '<hr>';
-        /**
-         * @return 
-         */
+
         foreach($json['results'] as $v1){
             echo '<h3>' . $i . '</h3>' . ' ';
             echo '<pre>';
@@ -23,31 +21,21 @@
             echo '</pre>';
             $i++;
         }
+
         $new_arr = array_chunk($json['results'], 50);
-        echo '3rd group of 50 pokemons is here: ';
+        echo '<h4>3rd group of 50 pokemons</h4>';
         echo '<pre>';
         print_r($new_arr[2]);
         echo '</pre>';
         echo '<hr>';
         print_r(count($new_arr));
         echo '<hr>';
-        $counter = 0;
-        while($counter<count($new_arr)){
-            $link = "localhost:4000/?page=$counter";
-            echo "$link <br>";
-            $link = $new_arr[$counter];
-            echo '<pre>';
-            print_r($link) ;
-            echo '</pre>';
-            echo '<hr>';
-            echo http_build_query($link);
-            $counter++;
-        }
 
-
-/*         echo '<pre>';
-        print_r($json);
-        echo '</pre>'; */
+        echo '<h4>this is page ' . htmlspecialchars($_GET["page"]) . ' of Pokemons!</h4><br>';
+        $page = $_GET['page'];
+        echo '<pre>';
+        print_r($new_arr[$page]);
+        echo '</pre>';         
     ?>
 </body>
 </html>
