@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Array method and API</title>
+    <title>Handle Pokemons</title>
 </head>
 <body>
     <?php
@@ -28,12 +28,10 @@
         print_r($new_arr[2]);
         echo '</pre>';
         echo '<hr>';
-        print_r(count($new_arr));
-        echo '<hr>';
 
         $page = $_GET['page'];
         if ($page < count($new_arr)) {
-            echo '<h4>this is page ' . htmlspecialchars($_GET["page"]) . ' of Pokemons!</h4><br>';
+            echo '<h4>this is page ' . $_GET["page"] . ' of Pokemons!</h4><br>';
             echo '<pre>';
             print_r($new_arr[$page]);
             echo '</pre>';         
