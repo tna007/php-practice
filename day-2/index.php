@@ -31,7 +31,7 @@
 
         $page = $_GET['page'];
         if ($page < count($new_arr)) {
-            echo '<h4>this is page ' . $_GET["page"] . ' of Pokemons!</h4><br>';
+            echo '<h4>this is page ' . $_GET["page"] . ' of 50 Pokemons!</h4><br>';
             echo '<pre>';
             print_r($new_arr[$page]);
             echo '</pre>';         
