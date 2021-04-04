@@ -11,8 +11,7 @@
         echo '<h1>Finnish number translator</h1> <br>'; 
 
         $result = '';
-        //$counter = random_int(0,1000);
-        $counter = 207;
+        $counter = random_int(0,1000);
         echo $counter;
         echo '<hr>';
         if ($counter >= 0 && $counter <=10) {

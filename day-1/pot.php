@@ -17,7 +17,7 @@
         $count = 0;
         $round = 0;
         $jackpotCount = 0;
-        $jackpotWon = 1;
+        $jackpotWon = 5;
 
         while ($jackpotCount < $jackpotWon) {
             $jackpotCount++;
@@ -53,7 +53,7 @@
                 if ($oneCount === 5) {
                     $win = true;
                     echo 'Jackpot! <hr>';
-                    break;
+                   
                 } else if ($zeroCount === 5) {
                     echo "Congrats but no win <hr>";
                 } else if ($oneCount > 3 && $zeroCount < 5) {
@@ -65,9 +65,11 @@
         }
 
         $expend = $cost * $round;
+        $average_Expend = (fdiv($expend,$jackpotWon));
         
-        echo '<h4>' . $round . ' rounds was played til jackpot won </h4>';
-        echo '<h4>' . $expend .  ' euro was spent til jackpot </h4>';
+        echo '<h4>' . $round . ' rounds was played til ' . $jackpotWon . ' Jackpots won.</h4>';
+        echo '<h4>' . $expend .  ' euro was spent in total. </h4>';
+        echo '<h4> You\'ve won ' . $jackpotWon . ' Jackpots, on average ' . $average_Expend .  ' euro was spent to win' . ' a Jackpot.</h4>';
         
             
     ?>
