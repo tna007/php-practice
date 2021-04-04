@@ -1,4 +1,4 @@
-# [handle-pokemons](https://github.com/tna007/php-practice/tree/main/day-2)
+# [handle-pokemons](https://github.com/tna007/php-practice/blob/main/day-2/index.php)
 
 An exercise practiced with API from https://pokeapi.co/api/v2/pokemon?offset=0&limit=2000. Description as below:
 
