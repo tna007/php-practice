@@ -1,4 +1,4 @@
-# [day-1]()
+# [day-1](https://github.com/tna007/php-practice/tree/main/day-1)
 
 **_Finish number translator 0-1000_**
 
