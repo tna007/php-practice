@@ -22,7 +22,7 @@
             $i++;
         }
 
-        $new_arr = array_chunk($json['results'], 50);
+        $new_arr = array_chunk($json['results'], 50, true);
         echo '<h4>3rd group of 50 pokemons</h4>';
         echo '<pre>';
         print_r($new_arr[2]);
