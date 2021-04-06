@@ -1,6 +1,6 @@
 # Input validation
 
-1. `Function validate_username`, takes 1 argument, validate that it is a non empty string, and doesn’t have more than 25 characters
+1. `Function validate_username`, takes 1 argument, validate that it is a non empty string, no more than 25 characters or special chars (except . or _ )
 
 2. `Function validate_weekday`, takes 1 argument, validate that it is an integer within the range of 0 - 6 (0 - Sunday, 1 - Monday, 2 - Tuesday, 3 - Wednesday, 4 - Thursday, 5 - Friday, 6 - Saturday). Return true if all conditions are met, false otherwise
 
