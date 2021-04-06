@@ -83,6 +83,27 @@
         '<br>' .
         'Able to withdraw null from an account of 0 balance: ' . validate_widthdraw_amount(null, 0) . // false
         '<br>';
+        echo '<hr>';
+
+        function validate_school_email($email) {  
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)
+                && str_contains($email, 'bc.fi')) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        echo 'test_student@bc.fi is a valid school email: ' . validate_school_email('test_student@bc.fi') . // true
+        '<br>' .
+        'test_student@bc.fi@bc.fi is a valid school email: ' . validate_school_email('test_student@bc.fi@bc.fi') . // false
+        '<br>' .
+        'bc.fi@bc.fi is a valid school email: ' . validate_school_email('bc.fi@bc.fi') . // true
+        '<br>' .
+        'test_student@gmail.com is a valid school email: ' . validate_school_email('test_student@gmail.fi') . // false
+        '<br>' .
+        'test_student#bc.fi is a valid school email: ' . validate_school_email('test_student#bc.fi') . // false
+        '<br>';
     ?>
 </body>
 </html>
