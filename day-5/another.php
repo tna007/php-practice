@@ -7,7 +7,31 @@
     <title>Another</title>
 
     <style>
+    @import url(https://fonts.googleapis.com/css?family=RocknRoll+One:regular);
 
+body {
+    background-color: powderblue;
+    text-align: center;
+    color: honeydew;
+    font-family: 'RocknRoll One';
+}
+h1 {
+    font-size: 2.5em;
+    color: crimson;
+}
+.name {
+    margin: 1em auto;
+}
+.name:hover{
+    color: #333;
+    cursor: pointer;
+}
+button {
+    cursor: pointer;
+    margin: 2em;
+    padding: 0.5em;
+    font-family: 'RocknRoll One';
+}
 </style>
 </head>
 <body>
