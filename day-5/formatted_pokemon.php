@@ -15,7 +15,7 @@
     
     $new_arr = array_chunk($formatted_results, 50); //false (or empty parameter) will reindex the chunk numerically
     
-    isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
+    isset($_GET['page']) ? $page = $_GET['page'] : $page = 1;
     
     $options = array(
         'options' => array(

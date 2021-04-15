@@ -26,6 +26,15 @@ h1 {
     color: #333;
     cursor: pointer;
 }
+.page {
+    display: flex;
+    flex-wrap: wrap row;
+}
+ul li{
+    list-style: none;
+    display: inline-block;
+    padding: 1em;
+}
 button {
     cursor: pointer;
     margin: 2em;
@@ -43,35 +52,51 @@ button {
     <main id='list'>
     </main>
     <img src="https://i.gifer.com/WiCJ.gif" alt='via gifer'/> 
+    <div class='page'>
+    <ul id='pageNumber'></ul>
+    </div>
     <button id='prev'>Previous</button>
     <button id='next'>Next</button>
 <script>
-    let newPage = 0;
-            
+<?php
+isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
+?>
+    let currentPage = <?php echo $page ?>;
+    console.log(currentPage, typeof currentPage);
+    
+    document.getElementById('pageNumber').addEventListener('click', (e) => {
+        value = e.target.value;
+        console.log(value);
+        getNewPage(value);
+    });
+
     document.getElementById('prev').style.visibility='hidden';
 
     document.getElementById('next').addEventListener('click', (e) => {
-        if (newPage <23) {
-            newPage++;
-            let pokeURL = `formatted_pokemon.php?page=${newPage}`;
-            console.log(pokeURL);
-            getNewPage(newPage);
+        if (currentPage <23) {
+            currentPage++;
+            let pokeURL = `formatted_pokemon.php?page=${currentPage}`;
+            console.log(pokeURL, currentPage);
+            getNewPage(currentPage);
+            let pageNumb = document.createElement('li');
+            pageNumb.innerHTML = `<li><a href='formatted_pokemon.php?page=${currentPage}'>${currentPage}</a></li>`;
+            document.getElementById('pageNumber').appendChild(pageNumb);
         } else {
             document.getElementById('next').style.visibility='hidden';
         };
 
-        if (newPage >1) {
+        if (currentPage >1) {
             document.getElementById('prev').style.visibility='visible';
         }
     });
 
     document.getElementById('prev').addEventListener('click', (e) => {
-        newPage--;
-        let pokeURL = `formatted_pokemon.php?page=${newPage}`;
+        currentPage--;
+        let pokeURL = `formatted_pokemon.php?page=${currentPage}`;
         console.log(pokeURL);
-        getNewPage(newPage);
+        getNewPage(currentPage);
 
-        if (newPage == 1) {
+        if (currentPage == 1) {
             document.getElementById('prev').style.visibility='hidden';
         }
     });
@@ -98,7 +123,7 @@ button {
     function addPoke(obj) {
         const pokemon = document.createElement("div");
         pokemon.className = "pokemon";
-        pokemon.innerHTML = `<div class='name' data-url='${obj.url}'>${obj.name}</div>`;
+        pokemon.innerHTML = `<div class='name' data-url='${obj.url}'>${obj.name}</div><hr>`;
         document.getElementById("list").appendChild(pokemon);
     };
 
