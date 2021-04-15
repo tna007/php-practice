@@ -64,12 +64,6 @@ isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
     let currentPage = <?php echo $page ?>;
     console.log(currentPage, typeof currentPage);
     
-    document.getElementById('pageNumber').addEventListener('click', (e) => {
-        value = e.target.value;
-        console.log(value);
-        getNewPage(value);
-    });
-
     document.getElementById('prev').style.visibility='hidden';
 
     document.getElementById('next').addEventListener('click', (e) => {
