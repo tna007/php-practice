@@ -2,14 +2,19 @@
     $data = file_get_contents('data.json');
 
     $formatted_data = json_decode($data, true);
-    $results = $formatted_data['results'];
-            
-    $formatted_results = array();
 
-    for ($i = 0; $i < count($results); $i++){
-        // $results[$i]['name'] = strtoupper($results[$i]['name']); Notice that this is illegal 
-        $formatted_results[$i]['name'] = strtoupper($results[$i]['name']);
-        $formatted_results[$i]['url'] = $results[$i]['url'];
+    if(isset($formatted_data['results'])) {
+        $results = $formatted_data['results'];
+            
+        $formatted_results = array();
+
+        for ($i = 0; $i < count($results); $i++){
+            // $results[$i]['name'] = strtoupper($results[$i]['name']); Notice that this is illegal 
+            $formatted_results[$i]['name'] = strtoupper($results[$i]['name']);
+            $formatted_results[$i]['url'] = $results[$i]['url'];
+        };
+    } else {
+        $formatted_results = $formatted_data;
     };
     
     // $new_arr = array_chunk($formatted_results, 50); //false (or empty parameter) will reindex the chunk numerically
@@ -52,12 +57,19 @@
         array_push($formatted_results, $post_data);        
         $new_json = json_encode($formatted_results);
         echo $new_json;
+        
+        $success_resp = array('status' => 200, 'message' => '200 OK');
+        $success_resp_json = json_encode($success_resp);
+        echo $success_resp_json;
+
+        $write_file_result = file_put_contents('data.json', $new_json);
     } else {
         $error_resp = array('status' => 500, 'message' =>'Error saving new pokemon. Duplication found');
         $error_resp_json = json_encode($error_resp);
         echo $error_resp_json;
     };
-
+    
+   
     // print_r($formatted_results);
     // echo '</pre>';
 
