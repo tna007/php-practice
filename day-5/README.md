@@ -11,7 +11,7 @@ Starter code: https://gist.github.com/bch-fullstack/ddebce87fdca00206ca97ec63f2c
 
 **_Extended version of Pokemon list full-stack app_**
 
-1. Create a form in new_pokemon.php with input fields: id, name, and type of pokemon as a dropdown selector with the following choices https://bulbapedia.bulbagarden.net/wiki/Type
+1. Create a form in `new_pokemon.php` with input fields: id, name, and type of pokemon as a dropdown selector with the following choices https://bulbapedia.bulbagarden.net/wiki/Type
 
 2. Upon submission of the form, a POST request with the form parameters is sent to the same previous PHP file (`formatted_pokemon.php`) that has been developed in the previous version. **Only** add this new Pokemon to the list if id and name is unique, which mean they don't exist in the current array of pokemon.
 
