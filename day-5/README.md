@@ -15,4 +15,4 @@ Starter code: https://gist.github.com/bch-fullstack/ddebce87fdca00206ca97ec63f2c
 
 2. Upon submission of the form, a POST request with the form parameters is sent to the same previous PHP file (`formatted_pokemon.php`) that has been developed in the previous version. **Only** add this new Pokemon to the list if id and name is unique, which mean they don't exist in the current array of pokemon.
 
-3. In case the code decides not to save the pokemon, the JSON response should communicate about the reason for failing. Ex: { status: 500, message: ‘Error saving new pokemon. Duplication found’ } In case the code decides to save the pokemon, also communicate that with a status code of 200, and overwrite the existing `data.json` with new content that contains the new pokemon.
+3. In case the code decides not to save the pokemon, the JSON response should communicate about the reason for failing. Ex: `{ status: 500, message: ‘Error saving new pokemon. Duplication found’ }` In case the code decides to save the pokemon, also communicate that with a status code of 200, and overwrite the existing `data.json` with new content that contains the new pokemon.
