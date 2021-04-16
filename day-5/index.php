@@ -12,7 +12,7 @@
 body {
     background-color: powderblue;
     text-align: center;
-    color: honeydew;
+    color: #333;
     font-family: 'RocknRoll One';
 }
 h1 {
@@ -23,7 +23,7 @@ h1 {
     margin: 1em auto;
 }
 .name:hover{
-    color: #333;
+    color: honeydew;
     cursor: pointer;
 }
 .page {
@@ -55,16 +55,23 @@ button {
     <div class='page'>
     <ul id='pageNumber'></ul>
     </div>
-    <button id='prev'>Previous</button>
-    <button id='next'>Next</button>
+    <button class='nav' id='prev'>Previous</button>
+    <button class='nav' id='next'>Next</button>
 <script>
 <?php
 isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
 ?>
     let currentPage = <?php echo $page ?>;
-    console.log(currentPage, typeof currentPage);
+    getNewPage(currentPage);
     
     document.getElementById('prev').style.visibility='hidden';
+
+    document.querySelectorAll('.nav').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            console.log(e.target.id);
+            document.getElementById('prev').style.visibility='visible';
+        })
+    });
 
     document.getElementById('next').addEventListener('click', (e) => {
         if (currentPage <23) {
@@ -79,9 +86,9 @@ isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
             document.getElementById('next').style.visibility='hidden';
         };
 
-        if (currentPage >1) {
-            document.getElementById('prev').style.visibility='visible';
-        }
+        // if (currentPage >1) {
+        //     document.getElementById('prev').style.visibility='visible';
+        // }
     });
 
     document.getElementById('prev').addEventListener('click', (e) => {
@@ -90,12 +97,13 @@ isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
         console.log(pokeURL);
         getNewPage(currentPage);
 
-        if (currentPage == 1) {
+        if (currentPage == 0) {
             document.getElementById('prev').style.visibility='hidden';
         }
     });
 
     async function getNewPage(page) {
+        document.getElementById("list").innerHTML ='';
         let resp = await fetch(`formatted_pokemon.php?page=${page}`);
         let json = await resp.json();
         console.log(json);
@@ -117,7 +125,7 @@ isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
     function addPoke(obj) {
         const pokemon = document.createElement("div");
         pokemon.className = "pokemon";
-        pokemon.innerHTML = `<div class='name' data-url='${obj.url}'>${obj.name}</div><hr>`;
+        pokemon.innerHTML = `<div class='name' data-url='${obj.url}'>${obj.name}</div>`;
         document.getElementById("list").appendChild(pokemon);
     };
 
