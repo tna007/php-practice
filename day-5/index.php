@@ -23,7 +23,7 @@
     <button class='nav' id='next'>Next</button>
 <script>
     <?php
-    // create page parameter to add page list 
+    // create page parameter to add page list when clicking to a certain page number
     isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;    
     ?>
     let currentPage = <?php echo $page ?>;
