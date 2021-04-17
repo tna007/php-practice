@@ -65,7 +65,7 @@
                 echo json_response(200, 'Add Pokemon successfully');
                 echo $new_json;
                 
-                $write_file_result = file_put_contents('data.json', $new_json);
+                // $write_file_result = file_put_contents('data.json', $new_json);
             } else {
                 echo json_response(500, 'Error saving new pokemon. Duplication found');
             };
