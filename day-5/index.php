@@ -58,10 +58,7 @@ button {
     <button class='nav' id='prev'>Previous</button>
     <button class='nav' id='next'>Next</button>
 <script>
-<?php
-isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
-?>
-    let currentPage = <?php echo $page ?>;
+    let currentPage = 0;
     getNewPage(currentPage);
     
     document.getElementById('prev').style.visibility='hidden';
@@ -85,10 +82,6 @@ isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
         } else {
             document.getElementById('next').style.visibility='hidden';
         };
-
-        // if (currentPage >1) {
-        //     document.getElementById('prev').style.visibility='visible';
-        // }
     });
 
     document.getElementById('prev').addEventListener('click', (e) => {
@@ -102,24 +95,28 @@ isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
         }
     });
 
-    async function getNewPage(page) {
+    function getNewPage(page) {
         document.getElementById("list").innerHTML ='';
-        let resp = await fetch(`formatted_pokemon.php?page=${page}`);
-        let json = await resp.json();
-        console.log(json);
-        json.forEach(addPoke);
-
-        document.querySelectorAll('.pokemon .name').forEach(el => {
-            el.addEventListener('click', async (e) => {
-                let resp = await fetch(e.target.getAttribute('data-url'));
-                console.log(resp);
-                let json = await resp.json();
-                console.log(json);
-
-                console.log(json.sprites.front_default);
-                document.getElementById('currentPoke').setAttribute('src', json.sprites.front_default);
-            })
+        fetch(`formatted_pokemon.php?page=${page}`, {
+            method: 'GET',
         })
+        .then(resp => resp.json())
+        .then(json => {
+            json.forEach(addPoke);
+            document.querySelectorAll('.pokemon .name').forEach(el => {
+                el.addEventListener('click', addPokeImg)
+                });
+            }   
+        )
+        .catch((err) => console.log(err));
+    }
+
+    function addPokeImg(e) {
+        fetch(e.target.getAttribute('data-url'))
+        .then(resp => resp.json())
+        .then(json => {
+            console.log(json.sprites.front_default)
+            document.getElementById('currentPoke').setAttribute('src', json.sprites.front_default)});
     }
 
     function addPoke(obj) {
@@ -127,7 +124,7 @@ isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
         pokemon.className = "pokemon";
         pokemon.innerHTML = `<div class='name' data-url='${obj.url}'>${obj.name}</div>`;
         document.getElementById("list").appendChild(pokemon);
-    };
+    }
 
 </script>
 </body>
