@@ -5,43 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Another</title>
-
-    <style>
-    @import url(https://fonts.googleapis.com/css?family=RocknRoll+One:regular);
-
-body {
-    background-color: powderblue;
-    text-align: center;
-    color: #333;
-    font-family: 'RocknRoll One';
-}
-h1 {
-    font-size: 2.5em;
-    color: crimson;
-}
-.name {
-    margin: 1em auto;
-}
-.name:hover{
-    color: honeydew;
-    cursor: pointer;
-}
-.page {
-    display: flex;
-    flex-wrap: wrap row;
-}
-ul li{
-    list-style: none;
-    display: inline-block;
-    padding: 1em;
-}
-button {
-    cursor: pointer;
-    margin: 2em;
-    padding: 0.5em;
-    font-family: 'RocknRoll One';
-}
-</style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Pokedex</h1>
@@ -58,42 +22,63 @@ button {
     <button class='nav' id='prev'>Previous</button>
     <button class='nav' id='next'>Next</button>
 <script>
-    let currentPage = 0;
+    <?php
+    // create page parameter to add page list 
+    isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;    
+    ?>
+    let currentPage = <?php echo $page ?>;
     getNewPage(currentPage);
-    
-    document.getElementById('prev').style.visibility='hidden';
+
+    document.getElementById('prev').disabled = true;
 
     document.querySelectorAll('.nav').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            console.log(e.target.id);
-            document.getElementById('prev').style.visibility='visible';
-        })
-    });
+            btn.addEventListener('click', (e) => {
+                getPageDirection(e.target.id);
+            })
+    })
 
-    document.getElementById('next').addEventListener('click', (e) => {
-        if (currentPage <23) {
+    function getPageDirection(direction) {
+        if (direction === 'next' && currentPage < (lastPage - 1)) {
             currentPage++;
-            let pokeURL = `formatted_pokemon.php?page=${currentPage}`;
-            console.log(pokeURL, currentPage);
             getNewPage(currentPage);
-            let pageNumb = document.createElement('li');
-            pageNumb.innerHTML = `<li><a href='formatted_pokemon.php?page=${currentPage}'>${currentPage}</a></li>`;
-            document.getElementById('pageNumber').appendChild(pageNumb);
-        } else {
-            document.getElementById('next').style.visibility='hidden';
-        };
-    });
+            document.getElementById('prev').disabled = false;
 
-    document.getElementById('prev').addEventListener('click', (e) => {
-        currentPage--;
-        let pokeURL = `formatted_pokemon.php?page=${currentPage}`;
-        console.log(pokeURL);
-        getNewPage(currentPage);
+            if (currentPage === (lastPage - 1)) {
+            document.getElementById('next').disabled = true;
+            };
 
-        if (currentPage == 0) {
-            document.getElementById('prev').style.visibility='hidden';
-        }
-    });
+        } else if (direction === 'prev' && currentPage > 0) {
+            currentPage--;
+            getNewPage(currentPage);
+            document.getElementById('next').disabled = false;
+
+            if (currentPage === 0) {
+            document.getElementById('prev').disabled = true;
+            };
+        } 
+    }  
+
+    function addPageList(currentPage, totalPage) {
+        document.getElementById("pageNumber").innerHTML = '';
+		let pagination = document.getElementById("pageNumber");
+
+		// Create an element for each page and add it to pagination
+		for (let i = 1; i <= totalPage; i++) {
+			let listedPage;
+			if (i == currentPage) {
+				// If it's the current page, create a span element to contain page number
+				listedPage = document.createElement("span");
+				listedPage.innerHTML = i;
+
+			} else {
+				// Otherwise, create a link to the page number
+				listedPage = document.createElement("a");
+				listedPage.setAttribute(`href`, `?page=${i}`);
+				listedPage.innerHTML = i;
+				}
+				pagination.appendChild(listedPage);
+			}
+		};
 
     function getNewPage(page) {
         document.getElementById("list").innerHTML ='';
@@ -102,12 +87,19 @@ button {
         })
         .then(resp => resp.json())
         .then(json => {
-            json.forEach(addPoke);
+            lastPage = json[0];
+            let pokemons = json[1];
+            // pokemons is now type of object
+            Object.values(pokemons).forEach(addPoke);
+
+            getPageDirection();
+
+            addPageList(currentPage, lastPage);
+
             document.querySelectorAll('.pokemon .name').forEach(el => {
                 el.addEventListener('click', addPokeImg)
-                });
-            }   
-        )
+            });
+        })
         .catch((err) => console.log(err));
     }
 
