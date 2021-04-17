@@ -43,7 +43,8 @@
 
         $new_arr = array_chunk($formatted_results, 50); //false (or empty third parameter) will reindex the chunk numerically
 
-        $json_formatted_results = json_encode($new_arr[$page]);
+        $json_arr = array(count($new_arr), $new_arr[$page]);
+        $json_formatted_results = json_encode($json_arr);
         echo $json_formatted_results;
 
         // Create new JSON file
