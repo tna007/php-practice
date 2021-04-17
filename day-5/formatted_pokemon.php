@@ -1,11 +1,37 @@
 <?php
+    function json_response($code = 200, $message = null) {
+        // clear the old headers
+        header_remove();
+        // set the actual code
+        http_response_code($code);
+        // set the header to make sure cache is forced
+        header('Cache-Control: no-transform, public, max-age=300, s-maxage=900');
+        // treat this as json
+        header('Content-Type: application/json');
+
+        $status = array(
+            200 => '200 OK',
+            400 => '400 Bad Request',
+            404 => 'Page Not Found',
+            500 => '500 Internal Server Error',
+        );
+        //ok, validation err or failure
+        header("Status $status[$code]");
+        // return the encoded json
+        return json_encode(array(
+            'status' => $code,
+            'message' => $message,
+        ));
+    }
+
+    isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
+
     $data = file_get_contents('data.json');
 
     $formatted_data = json_decode($data, true);
+    $results = $formatted_data['results'];
 
-    if(isset($formatted_data['results'])) {
-        $results = $formatted_data['results'];
-            
+    if($_SERVER['REQUEST_METHOD'] == 'GET' && $page >= 0 && $page <= (ceil(count($results) / 50))) {          
         $formatted_results = array();
 
         for ($i = 0; $i < count($results); $i++){
@@ -13,64 +39,38 @@
             $formatted_results[$i]['name'] = strtoupper($results[$i]['name']);
             $formatted_results[$i]['url'] = $results[$i]['url'];
         };
+
+        $new_arr = array_chunk($formatted_results, 50); //false (or empty third parameter) will reindex the chunk numerically
+
+        $json_formatted_results = json_encode($new_arr[$page]);
+        echo $json_formatted_results;
+
+        // Create new JSON file
+        $write_file_result = file_put_contents('formatted_data.json', $json_formatted_results); 
+
+    } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if(isset($_POST['name']) && isset($_POST['id'])) {
+            $id = $_POST['id'];
+            $name = $_POST['name'];
+            $type = $_POST['type'];
+            $post_name = strtolower($name);
+            $post_data = array('name'=>$post_name, 'type' => $type, 'id' => $id);
+        }
+
+        if (!in_array($post_name, $results) && !isset($results[$id])) {
+            array_push($results, $post_data);        
+            $new_json = json_encode($results);
+            
+            echo json_response(200, 'Add Pokemon successfully');
+            echo $new_json;
+            
+            $write_file_result = file_put_contents('data.json', $new_json);
+        } else {
+            echo json_response(500, 'Error saving new pokemon. Duplication found');
+        };
     } else {
-        $formatted_results = $formatted_data;
+        echo json_response(404, 'Page Not Found');
     };
     
-    // $new_arr = array_chunk($formatted_results, 50); //false (or empty parameter) will reindex the chunk numerically
-    
-    // isset($_GET['page']) ? $page = $_GET['page'] : $page = 1;
-    
-    // $options = array(
-    //     'options' => array(
-    //         'min-range' => 0,
-    //         'max-range' => (count($new_arr) - 1)
-    //         )
-    //     );
-        
-    // $validated_page_number = filter_var($page, FILTER_VALIDATE_INT, $options);
-    // if($validated_page_number || $validated_page_number === 0) {  
-    //     $json_formatted_results = json_encode($new_arr[$page]);
-    //     echo $json_formatted_results;
-    // } else {
-    //     echo 'No such page';
-    // }; // filter_var return number 0 as false => 0 won't be validated => use || $validated_page_number === 0 to include page=0
-
-    // $write_file_result = file_put_contents('formatted_data.json', $json_formatted_results); // Create new JSON file
-    $id = $_POST['id'];
-    $name = $_POST['name'];
-    $type = $_POST['type'];
-    $post_name = strtoupper($name);
-    $post_data = array('name'=>$post_name, 'type' => $type, 'id' => $id);
-    // echo "$post_name <br>";
-
-    // echo '<pre>';
-    // print_r($post_data);
-    
-    $customised_json = json_encode($post_data);
-    // echo $customised_json;
-
-    // echo isset($formatted_results[$id]) ? 'true' : 'false';
-    // echo '<br>';
-    
-    if (!in_array($post_name, $formatted_results) && !isset($formatted_results[$id])) {
-        array_push($formatted_results, $post_data);        
-        $new_json = json_encode($formatted_results);
-        echo $new_json;
-        
-        $success_resp = array('status' => 200, 'message' => '200 OK');
-        $success_resp_json = json_encode($success_resp);
-        echo $success_resp_json;
-
-        $write_file_result = file_put_contents('data.json', $new_json);
-    } else {
-        $error_resp = array('status' => 500, 'message' =>'Error saving new pokemon. Duplication found');
-        $error_resp_json = json_encode($error_resp);
-        echo $error_resp_json;
-    };
-    
-   
-    // print_r($formatted_results);
-    // echo '</pre>';
 
 ?>
