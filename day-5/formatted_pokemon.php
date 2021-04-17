@@ -23,14 +23,15 @@
             'message' => $message,
         ));
     }
-
+    // allow page parameter on top of the code in order for fetching to work
     isset($_GET['page']) ? $page = $_GET['page'] : $page = 0;
 
     $data = file_get_contents('data.json');
 
-    $formatted_data = json_decode($data, true);
+    $formatted_data = json_decode($data, true); // retrieve original array data from original data.json
     $results = $formatted_data['results'];
 
+    // validate GET request data ($page parameter)
     if($_SERVER['REQUEST_METHOD'] == 'GET' && $page >= 0 && $page <= (ceil(count($results) / 50))) {          
         $formatted_results = array();
 
@@ -49,28 +50,32 @@
         $write_file_result = file_put_contents('formatted_data.json', $json_formatted_results); 
 
     } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        if(isset($_POST['name']) && isset($_POST['id'])) {
+        // validate POST request data ($name & $id)
+        if(!empty($_POST['name']) && !empty($_POST['id'])) {
             $id = $_POST['id'];
             $name = $_POST['name'];
             $type = $_POST['type'];
             $post_name = strtolower($name);
             $post_data = array('name'=>$post_name, 'type' => $type, 'id' => $id);
+
+            if (!in_array($post_name, $results) && !isset($results[$id])) {
+                array_push($formatted_data, $post_data);        
+                $new_json = json_encode($formatted_data);
+                
+                echo json_response(200, 'Add Pokemon successfully');
+                echo $new_json;
+                
+                $write_file_result = file_put_contents('data.json', $new_json);
+            } else {
+                echo json_response(500, 'Error saving new pokemon. Duplication found');
+            };
+
+        } else {
+            echo json_response(400, 'Bad Request. Missing Pokemon Name & Id');
         }
 
-        if (!in_array($post_name, $results) && !isset($results[$id])) {
-            array_push($results, $post_data);        
-            $new_json = json_encode($results);
-            
-            echo json_response(200, 'Add Pokemon successfully');
-            echo $new_json;
-            
-            $write_file_result = file_put_contents('data.json', $new_json);
-        } else {
-            echo json_response(500, 'Error saving new pokemon. Duplication found');
-        };
     } else {
         echo json_response(404, 'Page Not Found');
     };
     
-
 ?>
