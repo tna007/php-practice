@@ -1,0 +1,16 @@
+{
+  "recipes": [
+    {
+      "id": "1",
+      "name": "omlete",
+      "ingredients": "egg, balm oil",
+      "difficulty": "easy"
+    },
+    {
+      "id": "2",
+      "name": "boiled egg",
+      "ingredients": "egg, water",
+      "difficulty": "easy"
+    }
+  ]
+}
